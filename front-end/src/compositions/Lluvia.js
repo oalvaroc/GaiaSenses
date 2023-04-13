@@ -1,7 +1,10 @@
 // inspired by: https://openprocessing.org/sketch/386391
 
-import React from 'react'
+import React, { useEffect, useState } from "react"
 import Sketch from "react-p5";
+import Pd from "webpd";
+
+import patchSource from "../assets/lluvia.pd";
 
 const ELLIPSE_SIZE_MIN = 15;
 const ELLIPSE_SIZE_MAX = 250;
@@ -24,6 +27,23 @@ export default function Lluvia({ width, height, rain }) {
 
   let ellipseSize = normalize(rainMili, ELLIPSE_SIZE_MIN, ELLIPSE_SIZE_MAX);
   let fps = normalize(rainMili, FPS_MIN, FPS_MAX);
+
+  const [patchSrc, setPatch] = useState('');
+
+  useEffect(() => {
+    fetch(patchSource)
+      .then((res) => res.text())
+      .then((src) => setPatch(src))
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    let patch = Pd.loadPatch(patchSrc);
+    Pd.send(`fps_${patch.patchId}`, [1000 / fps]);
+    Pd.start();
+
+    return () => Pd.destroyPatch(patch);
+  }, [fps, patchSrc]);
 
   const setup = (p5, parent) => {
     p5.createCanvas(canvasWidth, canvasHeight).parent(parent)

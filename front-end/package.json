@@ -22,7 +22,8 @@
     "react-tooltip": "^4.2.21",
     "react-use-measure": "^2.1.1",
     "styled-components": "^5.3.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "webpd": "^0.4.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.4.0",
-    "cypress": "^10.4.0"
+    "cypress": "^10.4.0",
+    "util": "^0.12.5"
   }
 }
